@@ -31,6 +31,13 @@ your PKG_CONFIG_PATH, like so:
 
 export PKG_CONFIG_PATH=/opt/X11/lib/pkgconfig/:$PKG_CONFIG_PATH
 
+Example
+-------
+
+This Package contains a low level monadic binding for some functions of libcairo as well as a simple effect for drawing.
+There is even an example for the effectful usage for drawing a penrose tiling like this:
+
+![Example of a penrose tiling](https://raw.githubusercontent.com/eckart/cairo-idris/master/examples/penrose/penrose.png)
 
 
 
