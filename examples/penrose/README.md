@@ -3,7 +3,7 @@ Interactive Penrose Tiling
 
 An example of using the libcairo bindings to draw a penrose tiling
 
-![Example of a penrose tiling](https://github.com/eckart)
+![Example of a penrose tiling](https://raw.githubusercontent.com/eckart/cairo-idris/master/examples/penrose/penrose.png)
 
 For a nice article explaining the tiling see here:
 
