@@ -1,0 +1,14 @@
+package cairo
+
+sourcedir = src
+modules = Graphics.Cairo.Cairo, Graphics.Cairo.Config, Graphics.Cairo.Effect,
+	  Graphics.Shape
+opts = "-p effects -p sdl2" 
+
+makefile = MakefileCairo
+
+objs = cairo_idris.o, cairo_idris.h
+
+
+
+

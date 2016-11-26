@@ -1,0 +1,2 @@
+%flag C "-L/usr/local/Cellar/cairo/1.14.6_1/lib -lcairo"
+%flag C "-I/usr/local/Cellar/cairo/1.14.6_1/include/cairo -I/usr/local/Cellar/glib/2.50.1/include/glib-2.0 -I/usr/local/Cellar/glib/2.50.1/lib/glib-2.0/include -I/usr/local/opt/gettext/include -I/usr/local/Cellar/pcre/8.39/include -I/usr/local/Cellar/pixman/0.34.0/include/pixman-1 -I/usr/local/Cellar/fontconfig/2.12.1_2/include -I/usr/local/opt/freetype/include/freetype2 -I/usr/local/Cellar/libpng/1.6.25/include/libpng16"
