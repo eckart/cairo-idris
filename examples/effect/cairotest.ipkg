@@ -1,0 +1,7 @@
+package cairotest
+
+opts = "-p effects -p sdl2 -p cairo" 
+
+executable = test
+main = Main
+

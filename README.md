@@ -1,7 +1,7 @@
 Cairo Bindings for Idris
 =======================
 
-This project contains bindngs for the cairo drawing library http://cairographics.org/
+This project contains bindings for the cairo drawing library http://cairographics.org/
 
 
 How to configure
@@ -12,6 +12,8 @@ This can be done in various platform dependent ways, so I won't bother
 to write them down here as you can google them easily.
 
 One of the methods described on this page may also work for you http://cairographics.org/download/
+
+Additionally this project uses the idris SDL2 bindings to render to a window.
 
 Troubleshooting
 ---------------

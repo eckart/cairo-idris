@@ -10,12 +10,18 @@ import Graphics.SDL2.Effect
 import Graphics.Cairo.Effect
 import Graphics.Shape
 
+
+-- ================================================================
+-- Interactive Penrose Tiling
+-- ================================================================
+
 %default total
 
 -- ----------------------------------------------------------------
 -- a bit of infrastructure
 -- ----------------------------------------------------------------
 
+||| Type alias for convenience 
 C : Type
 C = Complex Double
 
@@ -26,9 +32,11 @@ divC (a:+b) (c:+d) = let real = (a*c+b*d) / (c*c+d*d)
                      in
                         (real:+imag)
 
+||| the golden ratio constant
 goldenRatio : Double
 goldenRatio = 0.5 * (1 + (sqrt 5))
 
+||| we model a triangle using a triple of complex numbers
 Tri : Type
 Tri = (C, C, C)
 
@@ -61,13 +69,15 @@ penroseTiling triangle = penroseTiling' [(Red triangle)]
 
 
 ||| Creates an initial upside down triangle 
-||| @angle the angle in degree
-initialTriangle : Int -> (angle: Double) -> Tri
+initialTriangle : (height: Int) -> (angle: Double) -> Tri
 initialTriangle height angle = let rad = 2 * pi * angle / 360
                                    y = (tan (rad / 2)) * (cast height)
                                in ( 0:+0,  (-1) * y :+ (-1) * (cast height), y :+ (-1) * (cast height))
 
-penroseTriangles : Nat -> Int -> List Penrose
+||| computes the full tiling 
+||| @level number of subdivide iterations
+||| @numTriangles the number of symetric triangles
+penroseTriangles : (level: Nat) -> (numTriangles: Int) -> List Penrose
 penroseTriangles level numTriangles = let angle = 360.0 / (cast numTriangles)
                                           tilings = penroseTiling $ initialTriangle 200 angle
                                       in head (drop level tilings)
@@ -83,6 +93,7 @@ red = RGBA 250 140 89 255
 green : Color
 green = RGBA 143 206 94 255
 
+||| get the color for drawing each individual triangle
 getColor : Penrose -> Color
 getColor (Red  _) = red
 getColor (Blue _) = green
@@ -90,7 +101,8 @@ getColor (Blue _) = green
 getTriangle : Penrose -> Tri
 getTriangle (Red triangle) = triangle 
 getTriangle (Blue triangle) = triangle 
- 
+
+||| draws a single penrose triangle using the cairo effect 
 renderTriangle : Penrose -> { [CAIRO_ON] } Eff () 
 renderTriangle penrose = with Effects do
   setSourceRGBA $ getColor penrose
@@ -114,19 +126,25 @@ renderTriangles triangles angle (S k) = with Effects do renderTriangle' triangle
 -- ----------------------------------------------------------------
 -- Setup and Main Loop
 -- ----------------------------------------------------------------
-    
+
+||| type synonym for the effectful programm
+||| we need at least the SDL and CAIRO effects
+||| STDIO is only needed for optional logging
 Prog : (sdl: Type) -> (cairo: Type) -> (result : Type) -> Type
 Prog sdl cairo t = { [SDL sdl,      -- the SDL effect
                       CAIRO cairo,  -- Cairo effect
                       STDIO]        -- a std io effect 
                      } Eff t
 
+||| convenvience shorthand for a running program
 Running : Type -> Type
 Running t = Prog SDLCtx () t
 
-        
+||| the application state containing the current subdivision level 
+||| and number of initial triangles        
 data AppState = MkState Nat Nat
 
+||| draw the current application state
 draw : AppState -> Running ()
 draw (MkState angles level) =  with Effects do
   renderClear white
@@ -143,7 +161,7 @@ draw (MkState angles level) =  with Effects do
   closeCanvas 
   render
 
-
+||| process sdl input events
 process : AppState -> Maybe Event -> Maybe AppState
 process _                       (Just (KeyDown KeyEsc))        = Nothing
 process _                       (Just (AppQuit))               = Nothing
@@ -158,6 +176,7 @@ process state                   _                              = Just state
 
 %default partial
 
+||| the effectful main application and loop
 emain : Prog () () ()
 emain = do putStrLn "Initialising"
            initialise "Penrose" 800 600
