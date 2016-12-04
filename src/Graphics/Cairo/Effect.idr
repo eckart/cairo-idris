@@ -31,7 +31,7 @@ data Cairo : Effect where
      AddPath     :                         sig Cairo () OpenPathCtx OpenPathCtx
      ClosePath   :                         sig Cairo () OpenPathCtx CairoCtx
      Center      :                         sig Cairo () CairoCtx    CairoCtx
-     WithCairo   : (DrawingCtx -> IO a) -> sig Cairo a  CairoCtx  CairoCtx
+     WithCairo   : (DrawingCtx -> IO a) -> sig Cairo a  CairoCtx    CairoCtx
 
 implementation Handler Cairo IO where
   handle ()  (GetCanvas (win, renderer)) k = 
@@ -54,6 +54,10 @@ implementation Handler Cairo IO where
   handle s Center k = do let (w,h) = windowSize s
                          translate (drawingCtx s) (cast w / 2) (cast h / 2)
                          k () s 
+  handle s OpenPath k = k () (MkOpenPath s)
+  handle s AddPath  k = k () s
+  handle (MkOpenPath cairoCtx) ClosePath k = k () cairoCtx                        
+                         
 
 CAIRO : Type -> EFFECT
 CAIRO res = MkEff res Cairo
