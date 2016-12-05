@@ -1,4 +1,4 @@
-CC = gcc
+CC = gcc -std=c99
 CFLAGS = `idris --include` `pkg-config --cflags cairo `
 
 cairo_idris.o: config cairo_idris.c cairo_idris.h
